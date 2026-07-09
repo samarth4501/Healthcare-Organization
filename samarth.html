@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Compliance Portal</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+/* ========================= */
+/* LOGIN PAGE */
+/* ========================= */
+
+.login-page{
+    height:100vh;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    padding-right:80px;
+    background-image: url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1920&q=80");
+    background-size:contain;
+    background-position:left center;
+    background-repeat:no-repeat;
+    background-color:#eaf4ff;
+}
+
+/* ========================= */
+/* LOGIN BOX */
+/* ========================= */
+
+.login-box{
+    width:400px;
+    padding:35px;
+    border-radius:20px;
+    background:rgba(255,255,255,.18);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.3);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.login-box h1{
+    text-align:center;
+    color:#1e3a8a;
+    margin-bottom:15px;
+}
+
+.login-box p{
+    text-align:center;
+    color:#555;
+    margin-bottom:20px;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+
+}
+
+textarea{
+
+    resize:none;
+    height:90px;
+
+}
+
+button{
+
+    padding:12px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ========================= */
+/* DASHBOARD */
+/* ========================= */
+
+.dashboard{
+
+    display:none;
+    height:100vh;
+
+}
+
+.main{
+
+    display:flex;
+    height:100%;
+
+}
+
+.sidebar{
+
+    width:260px;
+    background:#111827;
+    color:white;
+    padding:25px;
+    overflow-y:auto;
+
+}
+
+.sidebar h2{
+
+    text-align:center;
+    margin-bottom:25px;
+
+}
+
+.sidebar button{
+
+    width:100%;
+    margin:8px 0;
+
+}
+
+.content{
+
+    flex:1;
+    padding:25px;
+    background:#f4f7fb;
+    overflow-y:auto;
+
+}
+
+.section{
+
+    display:none;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+
+}
+
+/* ========================= */
+/* CARDS */
+/* ========================= */
+
+.cards{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.card{
+
+    flex:1;
+    min-width:180px;
+    background:#2563eb;
+    color:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+
+}
+
+.card h1{
+
+    font-size:34px;
+    margin-bottom:10px;
+
+}
+
+.card-box{
+
+    flex:1;
+    min-width:180px;
+    background:#2563eb;
+    color:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+
+}
+
+/* ========================= */
+/* RISK CARDS */
+/* ========================= */
+
+.risk{
+
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:20px;
+
+}
+
+.risk div{
+
+    flex:1;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    color:white;
+
+}
+
+.high{
+    background:#dc2626;
+}
+
+.medium{
+    background:#f59e0b;
+}
+
+.low{
+    background:#16a34a;
+}
+
+/* ========================= */
+/* ALERT BOX */
+/* ========================= */
+
+.alert{
+
+    background:#fee2e2;
+    border-left:5px solid red;
+    padding:15px;
+    margin:10px 0;
+
+}
+
+/* ========================= */
+/* TABLE */
+/* ========================= */
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+
+}
+
+th{
+
+    background:#2563eb;
+    color:white;
+    padding:12px;
+
+}
+
+td{
+
+    padding:10px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+
+}
+
+/* ========================= */
+/* VULNERABILITY COLORS */
+/* ========================= */
+
+.vuln-low{
+
+    background:#16a34a;
+    color:white;
+    padding:5px 10px;
+    border-radius:5px;
+
+}
+
+.vuln-medium{
+
+    background:#f59e0b;
+    color:white;
+    padding:5px 10px;
+    border-radius:5px;
+
+}
+
+.vuln-high{
+
+    background:#dc2626;
+    color:white;
+    padding:5px 10px;
+    border-radius:5px;
+
+}
+
+/* ========================= */
+/* INCIDENT STATUS */
+/* ========================= */
+
+.status-open{
+    color:red;
+    font-weight:bold;
+}
+
+.status-progress{
+    color:orange;
+    font-weight:bold;
+}
+
+.status-resolved{
+    color:green;
+    font-weight:bold;
+}
+
+/* ========================= */
+/* FORM TITLES */
+/* ========================= */
+
+h1{
+    color:#1f2937;
+    margin-bottom:10px;
+}
+
+h2{
+    color:#374151;
+    margin:20px 0 10px;
+}
+
+p{
+    line-height:1.6;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media(max-width:900px){
+
+.main{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.risk{
+    flex-direction:column;
+}
+
+.card,
+.card-box{
+    min-width:100%;
+}
+
+}
+
+/* ========================= */
+/* SCROLLBAR */
+/* ========================= */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#2563eb;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#e5e7eb;
+}
+
+</style>
+
+</head>
+
+<body>
+
+    <!-- ========================= -->
+<!-- LOGIN PAGE -->
+<!-- ========================= -->
+
+<div class="login-page" id="login">
+
+    <div class="login-box">
+
+        <h1>AI Compliance Portal</h1>
+
+        <p>Healthcare Patient Assistance System</p>
+
+        <input id="email" type="email" placeholder="Email">
+
+        <input id="password" type="password" placeholder="Password">
+
+        <button class="login-btn" onclick="login()">
+            Login
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- DASHBOARD -->
+<!-- ========================= -->
+
+<div class="dashboard" id="dashboard">
+
+<div class="main">
+
+<!-- ========================= -->
+<!-- SIDEBAR -->
+<!-- ========================= -->
+
+<div class="sidebar">
+
+<h2>AI Dashboard</h2>
+
+<button onclick="show('overview')">
+📊 Compliance Overview
+</button>
+
+<button onclick="show('risk')">
+🛡 Security Risk
+</button>
+
+<button onclick="show('insight')">
+🤖 AI Insights
+</button>
+
+<button onclick="show('chart')">
+📈 Charts
+</button>
+
+<button onclick="show('alert')">
+🚨 Alerts
+</button>
+
+<button onclick="show('vulnerability')">
+🔐 Vulnerability Management
+</button>
+
+<button onclick="show('incident')">
+🚨 Incident Management
+</button>
+
+<button onclick="show('patient')">
+👨‍⚕️ Patient Management
+</button>
+
+<button onclick="show('doctor')">
+🩺 Doctor Management
+</button>
+
+<button onclick="show('assessment')">
+🤖 AI Compliance Assessment
+</button>
+
+<button onclick="logout()">
+🚪 Logout
+</button>
+
+</div>
+
+<!-- ========================= -->
+<!-- CONTENT -->
+<!-- ========================= -->
+
+<div class="content">
+
+    <!-- ================================================== -->
+<!-- COMPLIANCE OVERVIEW -->
+<!-- ================================================== -->
+
+<div id="overview" class="section" style="display:block;">
+
+<h1>Compliance Overview</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card">
+<h1>92%</h1>
+<p>Compliance Score</p>
+</div>
+
+<div class="card">
+<h1>45</h1>
+<p>Total Audits</p>
+</div>
+
+<div class="card">
+<h1>38</h1>
+<p>Passed Audits</p>
+</div>
+
+<div class="card">
+<h1>7</h1>
+<p>Issues Found</p>
+</div>
+
+</div>
+
+<br>
+
+<div class="alert">
+✔ AI Compliance Status: Your healthcare system is currently compliant with most security policies. Regular audits and vulnerability scans are recommended.
+</div>
+
+</div>
+
+<!-- ================================================== -->
+<!-- NEXT SECTION STARTS BELOW -->
+
+<!-- ================================================== -->
+<!-- SECURITY RISK DASHBOARD -->
+<!-- ================================================== -->
+
+<div id="risk" class="section">
+
+<h1>🛡 Security Risk Dashboard</h1>
+
+<br>
+
+<div class="risk">
+
+<div class="high">
+<h1>3</h1>
+<p>High Risk</p>
+</div>
+
+<div class="medium">
+<h1>8</h1>
+<p>Medium Risk</p>
+</div>
+
+<div class="low">
+<h1>20</h1>
+<p>Low Risk</p>
+</div>
+
+</div>
+
+<br>
+
+<table>
+
+<tr>
+<th>Risk Type</th>
+<th>Status</th>
+<th>Priority</th>
+</tr>
+
+<tr>
+<td>Weak Password Policy</td>
+<td>Open</td>
+<td>High</td>
+</tr>
+
+<tr>
+<td>Firewall Configuration</td>
+<td>Monitoring</td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td>System Backup</td>
+<td>Completed</td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td>Database Encryption</td>
+<td>Secure</td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td>User Access Control</td>
+<td>Review Required</td>
+<td>Medium</td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- ================================================== -->
+<!-- AI SECURITY INSIGHTS -->
+<!-- ================================================== -->
+
+<div id="insight" class="section">
+
+<h1>🤖 AI Security Insights</h1>
+
+<br>
+
+<ul>
+
+<li>✔ Compliance Score improved by 12%</li>
+
+<li>✔ Firewall is operating normally.</li>
+
+<li>⚠ Weak Password Policy detected.</li>
+
+<li>⚠ Missing Security Updates.</li>
+
+<li>✔ Database Encryption Active.</li>
+
+<li>✔ Backup completed successfully.</li>
+
+<li>⚠ User Access requires review.</li>
+
+<li>✔ AI Monitoring Service Running.</li>
+
+</ul>
+
+<br>
+
+<div class="alert">
+
+🤖 AI Recommendation:
+Enable Multi-Factor Authentication for all users.
+
+</div>
+
+</div>
+
+<!-- ================================================== -->
+<!-- COMPLIANCE ANALYTICS -->
+<!-- ================================================== -->
+
+<div id="chart" class="section">
+
+<h1>📈 Compliance Analytics</h1>
+
+<br>
+
+<canvas id="myChart" height="100"></canvas>
+
+<br><br>
+
+<div class="cards">
+
+<div class="card">
+<h1>70%</h1>
+<p>January</p>
+</div>
+
+<div class="card">
+<h1>75%</h1>
+<p>February</p>
+</div>
+
+<div class="card">
+<h1>82%</h1>
+<p>March</p>
+</div>
+
+<div class="card">
+<h1>88%</h1>
+<p>April</p>
+</div>
+
+<div class="card">
+<h1>92%</h1>
+<p>May</p>
+</div>
+
+</div>
+
+<br>
+
+<table>
+
+<tr>
+<th>Month</th>
+<th>Compliance</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>January</td>
+<td>70%</td>
+<td>Needs Improvement</td>
+</tr>
+
+<tr>
+<td>February</td>
+<td>75%</td>
+<td>Improving</td>
+</tr>
+
+<tr>
+<td>March</td>
+<td>82%</td>
+<td>Good</td>
+</tr>
+
+<tr>
+<td>April</td>
+<td>88%</td>
+<td>Very Good</td>
+</tr>
+
+<tr>
+<td>May</td>
+<td>92%</td>
+<td>Excellent</td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- ================================================== -->
+<!-- REAL-TIME ALERTS -->
+<!-- ================================================== -->
+
+<div id="alert" class="section">
+
+<h1>🚨 Real-Time Alerts</h1>
+
+<br>
+
+<div class="alert">
+🚨 Unauthorized Login Attempt Detected
+</div>
+
+<div class="alert">
+⚠ Security Patch Required
+</div>
+
+<div class="alert">
+⚠ Outdated Software Version Detected
+</div>
+
+<div class="alert">
+⚠ High CPU Usage on Database Server
+</div>
+
+<div class="alert">
+✔ Daily Backup Completed Successfully
+</div>
+
+<div class="alert">
+✔ Antivirus Definitions Updated
+</div>
+
+<div class="alert">
+✔ Firewall Rules Successfully Applied
+</div>
+
+<div class="alert">
+✔ AI Monitoring Completed Successfully
+</div>
+
+</div>
+
+<!-- ================================================== -->
+<!-- SECURITY VULNERABILITY MANAGEMENT -->
+<!-- ================================================== -->
+
+<div id="vulnerability" class="section">
+
+<h1>🔐 Security Vulnerability Management</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card-box">
+<h1 id="totalV">0</h1>
+<p>Total Vulnerabilities</p>
+</div>
+
+<div class="card-box">
+<h1 id="highV">0</h1>
+<p>High Risk</p>
+</div>
+
+<div class="card-box">
+<h1 id="mediumV">0</h1>
+<p>Medium Risk</p>
+</div>
+
+<div class="card-box">
+<h1 id="lowV">0</h1>
+<p>Low Risk</p>
+</div>
+
+</div>
+
+<br>
+
+<h2>Add New Vulnerability</h2>
+
+<input id="vulnName" type="text" placeholder="Vulnerability Name">
+
+<select id="riskLevel">
+<option value="Low">Low</option>
+<option value="Medium">Medium</option>
+<option value="High">High</option>
+</select>
+
+<input id="assign" type="text" placeholder="Assigned To">
+
+<select id="vulnStatus">
+<option value="Pending">Pending</option>
+<option value="In Progress">In Progress</option>
+<option value="Resolved">Resolved</option>
+</select>
+
+<button onclick="addVulnerability()">
+Add Vulnerability
+</button>
+
+<br><br>
+
+<h2>Detected Vulnerabilities</h2>
+
+<table id="vTable">
+
+<tr>
+<th>Vulnerability</th>
+<th>Risk</th>
+<th>Assigned To</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Weak Password Policy</td>
+<td><span class="vuln-high">High</span></td>
+<td>Security Team</td>
+<td>Pending</td>
+</tr>
+
+<tr>
+<td>Missing Windows Updates</td>
+<td><span class="vuln-medium">Medium</span></td>
+<td>IT Department</td>
+<td>In Progress</td>
+</tr>
+
+<tr>
+<td>Firewall Rule Review</td>
+<td><span class="vuln-low">Low</span></td>
+<td>Network Team</td>
+<td>Resolved</td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- ================================================== -->
+<!-- INCIDENT MANAGEMENT SYSTEM -->
+<!-- ================================================== -->
+
+<div id="incident" class="section">
+
+<h1>🚨 Incident Management System</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card-box">
+<h1 id="openIncident">0</h1>
+<p>Open Incidents</p>
+</div>
+
+<div class="card-box">
+<h1 id="progressIncident">0</h1>
+<p>In Progress</p>
+</div>
+
+<div class="card-box">
+<h1 id="resolvedIncident">0</h1>
+<p>Resolved</p>
+</div>
+
+<div class="card-box">
+<h1 id="totalIncident">0</h1>
+<p>Total Incidents</p>
+</div>
+
+</div>
+
+<br>
+
+<h2>Report Security Incident</h2>
+
+<input id="incidentTitle" type="text" placeholder="Incident Title">
+
+<textarea id="incidentDesc" placeholder="Incident Description"></textarea>
+
+<select id="rootCause">
+<option>Human Error</option>
+<option>Malware Attack</option>
+<option>Network Failure</option>
+<option>System Failure</option>
+<option>Unauthorized Access</option>
+<option>Other</option>
+</select>
+
+<button onclick="addIncident()">
+Report Incident
+</button>
+
+<br><br>
+
+<div id="incidentAlert" class="alert" style="display:none;">
+
+✅ Incident Reported Successfully
+
+</div>
+
+<h2>Incident Tracking</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Incident</th>
+<th>Root Cause</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="incidentTable">
+
+<tr>
+
+<td>INC001</td>
+
+<td>Unauthorized Login</td>
+
+<td>Human Error</td>
+
+<td class="status-open">Open</td>
+
+<td>
+
+<button disabled>
+Sample
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- ================================================== -->
+<!-- PATIENT MANAGEMENT -->
+<!-- ================================================== -->
+
+<div id="patient" class="section">
+
+<h1>👨‍⚕️ Patient Management</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card-box">
+<h1>120</h1>
+<p>Total Patients</p>
+</div>
+
+<div class="card-box">
+<h1>15</h1>
+<p>Admitted</p>
+</div>
+
+<div class="card-box">
+<h1>98</h1>
+<p>Discharged</p>
+</div>
+
+<div class="card-box">
+<h1>7</h1>
+<p>Critical</p>
+</div>
+
+</div>
+
+<br>
+
+<h2>Add New Patient</h2>
+
+<input id="patientName" type="text" placeholder="Patient Name">
+
+<input id="patientAge" type="number" placeholder="Age">
+
+<select id="patientGender">
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+
+<input id="patientDisease" type="text" placeholder="Disease">
+
+<input id="patientDoctor" type="text" placeholder="Assigned Doctor">
+
+<input id="patientPhone" type="text" placeholder="Phone Number">
+
+<textarea id="patientAddress" placeholder="Address"></textarea>
+
+<select id="patientStatus">
+<option>Admitted</option>
+<option>Under Treatment</option>
+<option>Discharged</option>
+<option>Critical</option>
+</select>
+
+<button onclick="addPatient()">
+
+Add Patient
+
+</button>
+
+<br><br>
+
+<h2>Patient Records</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Age</th>
+<th>Gender</th>
+<th>Disease</th>
+<th>Doctor</th>
+<th>Phone</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="patientTable">
+
+<tr>
+
+<td>P001</td>
+<td>Rahul Patil</td>
+<td>25</td>
+<td>Male</td>
+<td>Diabetes</td>
+<td>Dr. Sharma</td>
+<td>9876543210</td>
+<td>Admitted</td>
+
+</tr>
+
+<tr>
+
+<td>P002</td>
+<td>Sneha Pawar</td>
+<td>30</td>
+<td>Female</td>
+<td>Fever</td>
+<td>Dr. Mehta</td>
+<td>9876501234</td>
+<td>Under Treatment</td>
+
+</tr>
+
+<tr>
+
+<td>P003</td>
+<td>Rohan Jadhav</td>
+<td>42</td>
+<td>Male</td>
+<td>Heart Disease</td>
+<td>Dr. Kulkarni</td>
+<td>9898989898</td>
+<td>Critical</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- ================================================== -->
+<!-- DOCTOR MANAGEMENT -->
+<!-- ================================================== -->
+
+<div id="doctor" class="section">
+
+<h1>🩺 Doctor Management</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card-box">
+<h1>25</h1>
+<p>Total Doctors</p>
+</div>
+
+<div class="card-box">
+<h1>18</h1>
+<p>Available</p>
+</div>
+
+<div class="card-box">
+<h1>5</h1>
+<p>On Leave</p>
+</div>
+
+<div class="card-box">
+<h1>2</h1>
+<p>Emergency Duty</p>
+</div>
+
+</div>
+
+<br>
+
+<h2>Add New Doctor</h2>
+
+<input id="doctorName" type="text" placeholder="Doctor Name">
+
+<input id="doctorSpecialization" type="text" placeholder="Specialization">
+
+<input id="doctorDepartment" type="text" placeholder="Department">
+
+<input id="doctorQualification" type="text" placeholder="Qualification">
+
+<input id="doctorExperience" type="number" placeholder="Experience (Years)">
+
+<input id="doctorPhone" type="text" placeholder="Phone Number">
+
+<input id="doctorEmail" type="email" placeholder="Email Address">
+
+<select id="doctorStatus">
+<option>Available</option>
+<option>Busy</option>
+<option>On Leave</option>
+<option>Emergency Duty</option>
+</select>
+
+<button onclick="addDoctor()">
+Add Doctor
+</button>
+
+<br><br>
+
+<h2>Doctor Records</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Specialization</th>
+<th>Department</th>
+<th>Qualification</th>
+<th>Experience</th>
+<th>Phone</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="doctorTable">
+
+<tr>
+<td>D001</td>
+<td>Dr. Sharma</td>
+<td>Cardiologist</td>
+<td>Cardiology</td>
+<td>MD</td>
+<td>12 Years</td>
+<td>9876500001</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>D002</td>
+<td>Dr. Mehta</td>
+<td>General Physician</td>
+<td>General Medicine</td>
+<td>MBBS</td>
+<td>8 Years</td>
+<td>9876500002</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>D003</td>
+<td>Dr. Kulkarni</td>
+<td>Neurologist</td>
+<td>Neurology</td>
+<td>DM</td>
+<td>15 Years</td>
+<td>9876500003</td>
+<td>On Leave</td>
+</tr>
+
+<tr>
+<td>D004</td>
+<td>Dr. Patil</td>
+<td>Orthopedic</td>
+<td>Orthopedics</td>
+<td>MS</td>
+<td>10 Years</td>
+<td>9876500004</td>
+<td>Emergency Duty</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- ================================================== -->
+<!-- AI COMPLIANCE ASSESSMENT -->
+<!-- ================================================== -->
+
+<div id="assessment" class="section">
+
+<h1>🤖 AI Compliance Assessment</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card-box">
+<h1 id="score">85%</h1>
+<p>Compliance Score</p>
+</div>
+
+<div class="card-box">
+<h1>12</h1>
+<p>Security Checks</p>
+</div>
+
+<div class="card-box">
+<h1>3</h1>
+<p>Risks Found</p>
+</div>
+
+<div class="card-box">
+<h1>9</h1>
+<p>Passed Checks</p>
+</div>
+
+</div>
+
+<br>
+
+<h2>🔍 AI Infrastructure Scan</h2>
+
+<p>
+
+AI scans Servers, Database, Applications, Users and Network Devices.
+
+</p>
+
+<button onclick="scanSystem()">
+
+Start AI Scan
+
+</button>
+
+<br><br>
+
+<div class="alert">
+
+<p id="scanResult">
+
+Click <b>Start AI Scan</b> to begin security assessment.
+
+</p>
+
+</div>
+
+<br>
+
+<div class="risk">
+
+<div style="background:#f1f5f9;color:#000;padding:20px;border-radius:10px;">
+
+<h3>🔥 Firewall</h3>
+
+<p id="firewall">
+
+Checking...
+
+</p>
+
+</div>
+
+<div style="background:#f1f5f9;color:#000;padding:20px;border-radius:10px;">
+
+<h3>🔒 Data Protection</h3>
+
+<p id="data">
+
+Checking...
+
+</p>
+
+</div>
+
+<div style="background:#f1f5f9;color:#000;padding:20px;border-radius:10px;">
+
+<h3>👤 User Access</h3>
+
+<p id="access">
+
+Checking...
+
+</p>
+
+</div>
+
+</div>
+
+<br>
+
+<h2>⚠ AI Risk Analysis</h2>
+
+<ul>
+
+<li>⚠ Weak Password Policy Detected</li>
+
+<li>⚠ Outdated Software Version</li>
+
+<li>⚠ Missing Security Updates</li>
+
+<li>✔ Firewall Active</li>
+
+<li>✔ Database Backup Successful</li>
+
+<li>✔ SSL Certificate Valid</li>
+
+<li>✔ Antivirus Running</li>
+
+</ul>
+
+<br>
+
+<h2>Compliance Progress</h2>
+
+<div style="background:#ddd;height:28px;border-radius:30px;">
+
+<div
+style="width:85%;
+height:28px;
+background:#16a34a;
+border-radius:30px;
+text-align:center;
+line-height:28px;
+color:white;
+font-weight:bold;">
+
+85%
+
+</div>
+
+</div>
+
+<br>
+
+<h2>💡 AI Recommendations</h2>
+
+<ul id="recommend">
+
+<li>Enable Multi-Factor Authentication (MFA)</li>
+
+<li>Update Operating System Security Patches</li>
+
+<li>Encrypt Sensitive Patient Records</li>
+
+<li>Perform Weekly Vulnerability Assessment</li>
+
+<li>Review User Access Permissions Monthly</li>
+
+<li>Enable Database Activity Monitoring</li>
+
+<li>Maintain Daily Backup Schedule</li>
+
+</ul>
+
+<br>
+
+<button onclick="generateAI()">
+
+Generate AI Recommendations
+
+</button>
+
+<br><br>
+
+<h2>📋 Compliance Checklist</h2>
+
+<table>
+
+<tr>
+<th>Security Check</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Firewall Enabled</td>
+<td>✔ Passed</td>
+</tr>
+
+<tr>
+<td>Database Encryption</td>
+<td>✔ Passed</td>
+</tr>
+
+<tr>
+<td>Backup Verification</td>
+<td>✔ Passed</td>
+</tr>
+
+<tr>
+<td>Password Policy</td>
+<td>⚠ Needs Improvement</td>
+</tr>
+
+<tr>
+<td>Software Updates</td>
+<td>⚠ Pending</td>
+</tr>
+
+<tr>
+<td>User Access Review</td>
+<td>✔ Passed</td>
+</tr>
+
+<tr>
+<td>Network Monitoring</td>
+<td>✔ Passed</td>
+</tr>
+
+</table>
+
+<br>
+
+<h2>📊 Latest Scan Summary</h2>
+
+<div class="alert">
+
+✔ AI Scan completed successfully.<br>
+
+✔ Overall Compliance Score: <b>85%</b><br>
+
+⚠ 3 Risks Detected<br>
+
+✔ 9 Security Checks Passed<br>
+
+✔ Infrastructure Operating Normally
+
+</div>
+
+</div>
+
+<!-- ======================================= -->
+<!-- END OF CONTENT -->
+<!-- ======================================= -->
+
+</div>
+
+<!-- END CONTENT -->
+
+</div>
+
+<!-- END MAIN -->
+
+</div>
+
+<!-- END DASHBOARD -->
+
+<script>
+
+// =======================================
+// LOGIN
+// =======================================
+
+function login(){
+
+    let email=document.getElementById("email").value;
+    let password=document.getElementById("password").value;
+
+    if(email==="samarth@gmail.com" && password==="123456"){
+
+        document.getElementById("login").style.display="none";
+        document.getElementById("dashboard").style.display="block";
+
+        show("overview");
+
+    }else{
+
+        alert("Invalid Email or Password");
+
+    }
+
+}
+
+// =======================================
+// LOGOUT
+// =======================================
+
+function logout(){
+
+    document.getElementById("dashboard").style.display="none";
+
+    document.getElementById("login").style.display="flex";
+
+}
+
+// =======================================
+// SIDEBAR NAVIGATION
+// =======================================
+
+function show(id){
+
+    let sections=document.querySelectorAll(".section");
+
+    sections.forEach(function(sec){
+
+        sec.style.display="none";
+
+    });
+
+    let page=document.getElementById(id);
+
+    if(page){
+
+        page.style.display="block";
+
+    }
+
+}
+
+// =======================================
+// CHART.JS
+// =======================================
+
+window.onload=function(){
+
+let chart=document.getElementById("myChart");
+
+if(chart){
+
+new Chart(chart,{
+
+type:"bar",
+
+data:{
+
+labels:["Jan","Feb","Mar","Apr","May"],
+
+datasets:[{
+
+label:"Compliance Score",
+
+data:[70,75,82,88,92],
+
+backgroundColor:[
+"#2563eb",
+"#16a34a",
+"#f59e0b",
+"#7c3aed",
+"#dc2626"
+]
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+display:true
+}
+
+},
+
+scales:{
+
+y:{
+beginAtZero:true,
+max:100
+}
+
+}
+
+}
+
+});
+
+}
+
+};
+
+// =======================================
+// VARIABLES
+// =======================================
+
+let incidents=[];
+
+let incidentID=1;
+
+let totalV=0;
+
+let highV=0;
+
+let mediumV=0;
+
+let lowV=0;
+
+let patientID=4;
+
+let doctorID=5;
+
+// =======================================
+// VULNERABILITY MANAGEMENT
+// =======================================
+
+function addVulnerability(){
+
+let name=document.getElementById("vulnName").value.trim();
+let risk=document.getElementById("riskLevel").value;
+let assign=document.getElementById("assign").value.trim();
+let status=document.getElementById("vulnStatus").value;
+
+if(name==="" || assign===""){
+
+alert("Please fill all fields.");
+
+return;
+
+}
+
+let table=document.getElementById("vTable");
+
+let row=table.insertRow(-1);
+
+row.insertCell(0).innerHTML=name;
+
+if(risk==="Low"){
+
+row.insertCell(1).innerHTML="<span class='vuln-low'>Low</span>";
+
+lowV++;
+
+}
+else if(risk==="Medium"){
+
+row.insertCell(1).innerHTML="<span class='vuln-medium'>Medium</span>";
+
+mediumV++;
+
+}
+else{
+
+row.insertCell(1).innerHTML="<span class='vuln-high'>High</span>";
+
+highV++;
+
+}
+
+row.insertCell(2).innerHTML=assign;
+
+row.insertCell(3).innerHTML=status;
+
+totalV++;
+
+document.getElementById("totalV").innerHTML=totalV;
+document.getElementById("highV").innerHTML=highV;
+document.getElementById("mediumV").innerHTML=mediumV;
+document.getElementById("lowV").innerHTML=lowV;
+
+document.getElementById("vulnName").value="";
+document.getElementById("assign").value="";
+document.getElementById("riskLevel").selectedIndex=0;
+document.getElementById("vulnStatus").selectedIndex=0;
+
+alert("Vulnerability Added Successfully.");
+
+}
+
+// =======================================
+// INCIDENT MANAGEMENT
+// =======================================
+
+function addIncident(){
+
+let title=document.getElementById("incidentTitle").value.trim();
+let cause=document.getElementById("rootCause").value;
+
+if(title===""){
+
+alert("Please enter Incident Title.");
+
+return;
+
+}
+
+incidents.push({
+
+id:"INC00"+incidentID,
+title:title,
+cause:cause,
+status:"Open"
+
+});
+
+incidentID++;
+
+document.getElementById("incidentTitle").value="";
+document.getElementById("incidentDesc").value="";
+
+displayIncidents();
+
+document.getElementById("incidentAlert").style.display="block";
+
+setTimeout(function(){
+
+document.getElementById("incidentAlert").style.display="none";
+
+},3000);
+
+}
+
+function displayIncidents(){
+
+let table=document.getElementById("incidentTable");
+
+table.innerHTML="";
+
+let open=0;
+let progress=0;
+let resolved=0;
+
+incidents.forEach(function(item,index){
+
+let cls="status-open";
+
+if(item.status==="Open"){
+
+open++;
+
+cls="status-open";
+
+}
+else if(item.status==="In Progress"){
+
+progress++;
+
+cls="status-progress";
+
+}
+else{
+
+resolved++;
+
+cls="status-resolved";
+
+}
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${item.id}</td>
+
+<td>${item.title}</td>
+
+<td>${item.cause}</td>
+
+<td class="${cls}">${item.status}</td>
+
+<td>
+
+<button onclick="updateIncident(${index})">
+
+Update
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("openIncident").innerHTML=open;
+document.getElementById("progressIncident").innerHTML=progress;
+document.getElementById("resolvedIncident").innerHTML=resolved;
+document.getElementById("totalIncident").innerHTML=incidents.length;
+
+}
+
+function updateIncident(index){
+
+if(incidents[index].status==="Open"){
+
+incidents[index].status="In Progress";
+
+}
+else if(incidents[index].status==="In Progress"){
+
+incidents[index].status="Resolved";
+
+}
+else{
+
+alert("Incident already resolved.");
+
+}
+
+displayIncidents();
+
+}
+
+// =======================================
+// PATIENT MANAGEMENT
+// =======================================
+
+function addPatient(){
+
+let name=document.getElementById("patientName").value.trim();
+let age=document.getElementById("patientAge").value;
+let gender=document.getElementById("patientGender").value;
+let disease=document.getElementById("patientDisease").value.trim();
+let doctor=document.getElementById("patientDoctor").value.trim();
+let phone=document.getElementById("patientPhone").value.trim();
+let status=document.getElementById("patientStatus").value;
+
+if(name==="" || age==="" || disease==="" || doctor===""){
+
+alert("Please fill all required patient details.");
+
+return;
+
+}
+
+let table=document.getElementById("patientTable");
+
+let row=table.insertRow(-1);
+
+row.innerHTML=`
+<td>P00${patientID}</td>
+<td>${name}</td>
+<td>${age}</td>
+<td>${gender}</td>
+<td>${disease}</td>
+<td>${doctor}</td>
+<td>${phone}</td>
+<td>${status}</td>
+`;
+
+patientID++;
+
+document.getElementById("patientName").value="";
+document.getElementById("patientAge").value="";
+document.getElementById("patientDisease").value="";
+document.getElementById("patientDoctor").value="";
+document.getElementById("patientPhone").value="";
+document.getElementById("patientAddress").value="";
+document.getElementById("patientGender").selectedIndex=0;
+document.getElementById("patientStatus").selectedIndex=0;
+
+alert("Patient Added Successfully.");
+
+}
+
+// =======================================
+// DOCTOR MANAGEMENT
+// =======================================
+
+function addDoctor(){
+
+let name=document.getElementById("doctorName").value.trim();
+let specialization=document.getElementById("doctorSpecialization").value.trim();
+let department=document.getElementById("doctorDepartment").value.trim();
+let qualification=document.getElementById("doctorQualification").value.trim();
+let experience=document.getElementById("doctorExperience").value;
+let phone=document.getElementById("doctorPhone").value.trim();
+let email=document.getElementById("doctorEmail").value.trim();
+let status=document.getElementById("doctorStatus").value;
+
+if(name==="" || specialization==="" || department===""){
+
+alert("Please fill all required doctor details.");
+
+return;
+
+}
+
+let table=document.getElementById("doctorTable");
+
+let row=table.insertRow(-1);
+
+row.innerHTML=`
+<td>D00${doctorID}</td>
+<td>${name}</td>
+<td>${specialization}</td>
+<td>${department}</td>
+<td>${qualification}</td>
+<td>${experience} Years</td>
+<td>${phone}</td>
+<td>${status}</td>
+`;
+
+doctorID++;
+
+document.getElementById("doctorName").value="";
+document.getElementById("doctorSpecialization").value="";
+document.getElementById("doctorDepartment").value="";
+document.getElementById("doctorQualification").value="";
+document.getElementById("doctorExperience").value="";
+document.getElementById("doctorPhone").value="";
+document.getElementById("doctorEmail").value="";
+document.getElementById("doctorStatus").selectedIndex=0;
+
+alert("Doctor Added Successfully.");
+
+}
+
+// =======================================
+// AI INFRASTRUCTURE SCAN
+// =======================================
+
+function scanSystem(){
+
+document.getElementById("scanResult").innerHTML=
+"✅ AI Scan Completed Successfully.";
+
+document.getElementById("firewall").innerHTML=
+"✔ Firewall Protected";
+
+document.getElementById("data").innerHTML=
+"✔ Database Encrypted";
+
+document.getElementById("access").innerHTML=
+"✔ User Access Verified";
+
+document.getElementById("score").innerHTML="92%";
+
+}
+
+// =======================================
+// AI RECOMMENDATION
+// =======================================
+
+function generateAI(){
+
+let list=document.getElementById("recommend");
+
+list.innerHTML=`
+
+<li>✔ Enable Multi-Factor Authentication (MFA)</li>
+
+<li>✔ Install Latest Security Updates</li>
+
+<li>✔ Encrypt Sensitive Patient Records</li>
+
+<li>✔ Perform Weekly Vulnerability Scans</li>
+
+<li>✔ Enable Database Activity Monitoring</li>
+
+<li>✔ Schedule Automatic Daily Backups</li>
+
+<li>✔ Review User Access Every Month</li>
+
+<li>✔ Implement Zero Trust Security</li>
+
+<li>✔ Continuous AI Threat Monitoring</li>
+
+`;
+
+alert("AI Recommendations Generated Successfully!");
+
+}
+
+</script>
+
+</body>
+</html>
